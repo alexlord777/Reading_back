@@ -1,7 +1,9 @@
-const{dataGeminis}= require('./../helpers/getDataGeminis');
+const{dataGeminis,cleanData}= require('./../helpers/getDataGeminis');
 
-const getData = (nivel,tema)=>{
-    dataGeminis(nivel,tema)
+const getData = async(nivel,tema)=>{
+    const data=await dataGeminis(nivel,tema);
+    const res=cleanData(data)
+    return res;
 }
 
 module.exports={

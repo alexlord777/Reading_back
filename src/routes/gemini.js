@@ -11,13 +11,10 @@ const roterg = express.Router();
 
 
 
-roterg.post('/gem', async (req, res) => {
+roterg.post('/', async (req, res) => {
     const nivel= req.body.nivel;
     const tema= req.body.tema;
-
-    getData(nivel,tema)
-    
-    res.send('ok');
+    res.json(await getData(nivel,tema))
 })
 
 module.exports = {
