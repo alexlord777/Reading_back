@@ -4,7 +4,10 @@ const mongoose= require('mongoose');
         type:String,
         required:true
     },
-    username:{
+    register:{
+        type:Boolean
+    },
+    username:{ 
         type:String,
         required:false,
         unique:true
