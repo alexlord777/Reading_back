@@ -7,6 +7,11 @@ const mongoose= require('mongoose');
     register:{
         type:Boolean
     },
+    email:{
+        type:String,
+        required:false,
+        unique:true
+    },
     username:{ 
         type:String,
         required:false,

@@ -7,3 +7,5 @@ router.get('/task/:id',validarToken,functions.getTask);
 router.post('/task',validarToken,functions.create);
 router.delete('/task/:id',validarToken,functions.delete);
 router.put('/task/:id',validarToken,functions.update);
+
+module.exports=router;

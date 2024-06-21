@@ -6,13 +6,21 @@ const acess = require('./../lib/jwt');
 const register = async (req, res) => {
     const u = await USER.findOne({ username: req.body.username });
     try {
-        if (u == null) {
+        if (u) return res.status(400).json({
+        message: ["The username is already in use"],
+      });
 
             const passhash = await bcrypy.hash(req.body.password, 10)
 
-            const user = await USER({
+
+            const user =(req.body.email === null)? await USER({
                 type: "user",
                 username: req.body.username,
+                password: passhash
+            }):await USER({
+                type: "user",
+                username: req.body.username,
+                email:req.body.email,
                 password: passhash
             });
 
@@ -21,15 +29,18 @@ const register = async (req, res) => {
             const token = await acess(userSave._id)
 
             res.cookie('token', token)
-            res.json({
+            return (req.body.email === null)? res.json({
                 id: userSave._id,
+                username: userSave.username,
+                register: userSave.register
+            }):res.json({
+                id: userSave._id,
+                email:userSave.email,
                 username: userSave.username,
                 register: userSave.register
             })
 
-        } else {
-            res.send("That name exist")
-        }
+        
     } catch (error) {
         res.status(500).json({ error: error.messaje })
     }
