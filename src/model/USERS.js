@@ -9,7 +9,7 @@ const mongoose= require('mongoose');
     },
     email:{
         type:String,
-        required:false,
+        required:true,
         unique:true
     },
     username:{ 
