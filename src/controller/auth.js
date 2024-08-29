@@ -1,6 +1,8 @@
 const USER = require('./../model/USERS');
 const bcrypy = require('bcryptjs')
 const acess = require('./../lib/jwt');
+const jwt= require('jsonwebtoken');
+require('dotenv').config();
 
 
 const register = async (req, res) => {
@@ -52,7 +54,6 @@ const register = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error)
         res.status(500).json({ error: error.messaje })
     }
 }
@@ -63,11 +64,11 @@ const loggin = async (req, res) => {
 
         const userFund = await USER.findOne({ username: req.body.username })
 
-        if (!userFund) return res.status(400).json({ message: "user not found" });
+        if (!userFund) return res.status(400).json({ message: ["user not found"] });
 
         const isMatch = await bcrypy.compare(req.body.password, userFund.password);
 
-        if (!isMatch) return res.status(400).json({ message: "Incorrect password" });
+        if (!isMatch) return res.status(400).json({ message: ["Incorrect password"] });
 
         const token = await acess(userFund._id)
 
@@ -101,9 +102,31 @@ const profile = async (req, res) => {
     })
 }
 
+const verify= async(req,res)=>{
+
+    const {token}= req.cookies;
+
+    if(!token) return res.status(401).json([{message:"Unauthorized"}]);
+
+    jwt.verify(token,process.env.SECRET_WORD,async(err,user)=>{
+        if(err) return res.status(401).json([{message:"Unauthorized"}]);
+
+        const userFund=await USER.findById(user.id);
+
+        if(!userFund) return res.status(401).json([{message:"Unauthorized"}]);
+
+        return res.json({
+            id:userFund._id,
+            username:userFund.username,
+            email:userFund.email
+        })
+    })
+}
+
 module.exports = {
     reg: register,
     log: loggin,
     logO: logOut,
-    pro: profile
+    pro: profile,
+    verify:verify
 }

@@ -8,6 +8,7 @@ const vals=require('./../middlewares/validorSchema')
 roterlo.post('/register',vals(validarSchema.reg) ,auth.reg);
 roterlo.post('/login',vals(validarSchema.log) ,auth.log);
 roterlo.post('/logout',auth.logO);
-roterlo.get('/profile',validarToken,auth.pro)
+roterlo.get('/profile',validarToken,auth.pro);
+roterlo.get('/verify',auth.verify)
 
 module.exports=roterlo;
